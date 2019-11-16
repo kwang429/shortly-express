@@ -1,5 +1,4 @@
 const parseCookies = (req, res, next) => {
-  console.log(req.headers);
   if (req.headers.cookie) {
     var cookiesArr = req.headers.cookie.split('; ');
     cookiesArr.forEach((cookie) => {

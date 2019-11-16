@@ -95,13 +95,11 @@ app.post('/signup', (req, res, next)=>{
   // console.log('our POST request--->', models.Users.create({ username, password }));
   models.Users.create({ username, password })
     .then(()=>{
-      console.log('User Created!');
       res.status(201);
       res.redirect('/');
       res.end();
     })
     .catch((err) => {
-      console.log('User Already Exsists!');
       res.status(409);
       res.redirect('/signup');
       res.end();
@@ -114,7 +112,17 @@ app.post('/login', (req, res, next) => {
   //get method on model, call in the context of Users
   models.Users.get({username: req.body.username})
     .then(({username, password, salt}) =>{
-      console.log(models.Users.compare(req.body.password, password, salt));
+      if (models.Users.compare(req.body.password, password, salt)) {
+        res.redirect('/');
+        res.end();
+      } else {
+        res.redirect('/login');
+        res.end();
+      }
+    })
+    .catch((err) =>{
+      res.redirect('/login');
+      res.end();
     });
 });
 
