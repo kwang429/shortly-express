@@ -82,6 +82,11 @@ app.get('/signup',
     res.render('signup');
   });
 
+app.get('/login',
+  (req, res) => {
+    res.render('login');
+  });
+
 app.post('/signup', (req, res, next)=>{
   // access user/pw info from req.body.user / pw
   var username = req.body.username;
@@ -100,6 +105,16 @@ app.post('/signup', (req, res, next)=>{
       res.status(409);
       res.redirect('/signup');
       res.end();
+    });
+});
+
+app.post('/login', (req, res, next) => {
+  //create options
+  //
+  //get method on model, call in the context of Users
+  models.Users.get({username: req.body.username})
+    .then(({username, password, salt}) =>{
+      console.log(models.Users.compare(req.body.password, password, salt));
     });
 });
 
